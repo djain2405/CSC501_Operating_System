@@ -2,6 +2,8 @@
 #include <kernel.h>
 #include <proc.h>
 
+static unsigned long *esp;
+
 void printprocstks(int priority)
 {
 

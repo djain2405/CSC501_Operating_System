@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <kernel.h>
 #include <proc.h>
@@ -15,6 +14,7 @@ void printprocstks(int priority)
         
         process = &proctab[i];
 
+        // validate pid
         if( (process->pstate) == PRFREE || (process->pprio <= priority) ) {
             continue;
         }
@@ -25,8 +25,14 @@ void printprocstks(int priority)
             kprintf("\t base: 0x%08x\n", process->pbase);
             kprintf("\t limit: 0x%08x\n", process->plimit);
             kprintf("\t len: %d\n", process->pstklen);
-            kprintf("\t pointer: 0x%08x\n", process->pesp);
-        
+            if( i == currpid) {
+                // special case for current process
+                asm("movl %esp,esp");
+                kprintf("\t pointer: 0x%08x\n", esp);
+            }
+            else
+                kprintf("\t pointer: 0x%08x\n", process->pesp);
+
         }
 
     }

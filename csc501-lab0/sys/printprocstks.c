@@ -22,11 +22,11 @@ void printprocstks(int priority)
         }
         else {
             kprintf("Process [%s]\n", process->pname);
-            kprintf("\t pid: %d\n", i); 
-            kprintf("\t priority: %d\n",process->pprio);
-            kprintf("\t base: 0x%08x\n", process->pbase);
-            kprintf("\t limit: 0x%08x\n", process->plimit);
-            kprintf("\t len: %d\n", process->pstklen);
+            kprintf("\tpid: %d\n", i); 
+            kprintf("\tpriority: %d\n",process->pprio);
+            kprintf("\tbase: 0x%08x\n", process->pbase);
+            kprintf("\tlimit: 0x%08x\n", process->plimit);
+            kprintf("\tlen: %d\n", process->pstklen);
             if( i == currpid) {
                 // special case for current process
                 asm("movl %esp,esp");

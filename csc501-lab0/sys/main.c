@@ -34,9 +34,9 @@ int main()
 
 	syscallsummary_start();        
 	resume(prX = create(prch,2000,20,"proc X",1,'A'));
-	sleep(2);
-	sleep(2);
-	sleep(2);
+	sleep(1);
+	sleep(1);
+	sleep(1);
 	syscallsummary_stop();
 	printsyscallsummary();
 

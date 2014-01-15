@@ -19,6 +19,7 @@ char c;
 	int i;
 	sleep(5);	
 }
+
 int main()
 {
 	kprintf("Houjun Tang (htang4)\n-----------------------\n");
@@ -30,7 +31,7 @@ int main()
 	
 	printtos();
 
-	printprocstks(0);
+	printprocstks(-1);
 
 	syscallsummary_start();        
 	resume(prX = create(prch,2000,20,"proc X",1,'A'));
@@ -42,3 +43,18 @@ int main()
 
 	return 0;
 }
+/*
+
+
+int main()
+{
+    kprintf("Task 5 (printsyscallsummary)\n");
+	syscallsummary_start();        
+	resume(prX = create(prch,2000,20,"proc X",1,'A'));
+	sleep(10);
+	syscallsummary_stop();
+	printsyscallsummary();
+	return 0;
+}
+
+*/

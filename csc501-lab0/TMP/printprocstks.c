@@ -30,10 +30,10 @@ void printprocstks(int priority)
             if( i == currpid) {
                 // special case for current process
                 asm("movl %esp,esp");
-                kprintf("\t pointer: 0x%08x\n", esp);
+                kprintf("\tpointer: 0x%08x\n", esp);
             }
             else
-                kprintf("\t pointer: 0x%08x\n", process->pesp);
+                kprintf("\tpointer: 0x%08x\n", process->pesp);
 
         }
 

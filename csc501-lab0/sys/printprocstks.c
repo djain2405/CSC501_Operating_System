@@ -25,7 +25,7 @@ void printprocstks(int priority)
             kprintf("\tpid: %d\n", i); 
             kprintf("\tpriority: %d\n",process->pprio);
             kprintf("\tbase: 0x%08x\n", process->pbase);
-            kprintf("\tlimit: 0x%08x\n", process->plimit);
+            kprintf("\tlimit:0x%08x\n", process->plimit);
             kprintf("\tlen: %d\n", process->pstklen);
             if( i == currpid) {
                 // special case for current process

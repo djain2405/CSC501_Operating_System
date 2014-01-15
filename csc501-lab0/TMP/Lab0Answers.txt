@@ -1,18 +1,74 @@
 Additional Questions
+
 Write your answers to the following questions in a file named Lab0Answers.txt(in simple text).
 Please place this file in the sys/ directory and turn it in, along with the above programming assignment.
 
 1. Assuming the XINU text begins at address 0x0, draw a rough diagram of XINU's memory layout with addresses derived from your experimental measurements. Include the information you uncovered from running your version of printsegaddress() and printprocstks().
-
+   
+|--------|
+|        |
+|  free  |
+|  mem   |
+|        |
+|--------| base [0x00fffffc]
+|        |
+| prnull | stack pointer[0x00ffff3c]
+| stack  | stack limit  [0x00fff000]
+|        |
+|--------| base [0x00ffeff8]
+|        |
+|  main  | stack pointer[0x00ffefa0]
+|  stack | stack limit  [0x00ffdffc]
+|        |
+|--------| 
+|  heap  |
+|--------| ebss [0x00013cb8]
+|  bss   |
+|--------| edata[0x0000b540]
+|  data  | 
+|--------| etext[0x00009196]
+|  text  | 
+|--------| begin[0x00000000]
 
 2. What is the difference in stack top address before and after calling printtos() ? Draw a diagram to illustrate what are the contents of the items pushed into the stack between these two time points.
 
+Before calling printtos() is 0x00ffefc0, after is 0x00ffefb8.
+
+|        |
+|        |
+|--------| [0x00ffefc0]
+| Return | 
+| Address|
+|--------| 
+|  ebp   | [0x00ffefb8]
+|--------| 
+|   d    | [0x00ffefb4]
+|--------|
+|   c    | [0x00ffefb0]
+|--------|
+|   b    | [0x00ffefac]
+|--------|
+|   a    | [0x00ffefa8]
+|--------|
 
 3. Which byte order is adopted in the host machine that we are using ? How did you find out ?
 
+Little endian byte order. Using the following test case:
+    short int one = 0x0001;
+    char *test = (char *) &one;
+    kprintf("%s\n", test[0] ? "Little endian" : "Big endian");
+
+Reference: http://www.codeproject.com/Articles/4804/Basic-concepts-on-Endianness
 
 4. Briefly describe the mov, push, pusha, pop, and popa instructions in the x86.
-
+1) mov: copy the data referred to by its second operand (constant value, register/memory content) into the location referred to by its first operand(register/memory).
+2) push: places its operand(4-byte) onto the top of the stack in memory.
+pusha: places its operand(16-byte) onto the top of the stack in memory.
+3) pop: removes the 4-byte data element from the top of the stack into the specified operand.
+4) popa: removes the 16-byte data element from the top of the stack into the specified operand.
 
 
 5. In a stack frame, local variables are stored below the top of the stack. In task 3, does your result show all the local variables declared in your printtos function? If not, can you explain that? (hint: try to disable the compiler optimization by specifing -O0 in your Makefile)
+
+1) No
+2) Compiler optimize the program by fitting the local variables into registers and thus not shown in the printtos function. Disable compiler optimization by specifing -O0 force the compiler to fit them in stacks.

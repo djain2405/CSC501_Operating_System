@@ -31,7 +31,13 @@ SYSCALL stacktrace(int pid)
 	unsigned long	*sp, *fp;
 
 	if (pid != 0 && isbadpid(pid))
+	{
+        // added for PA0 tracing
+        if(syscall_trace_on == 1) {
+                syscall_time[currpid][curridx] += ctr1000 - start_time;
+        }
 		return SYSERR;
+	}
 	if (pid == currpid) {
 		asm("movl %esp,esp");
 		asm("movl %ebp,ebp");
@@ -52,6 +58,10 @@ SYSCALL stacktrace(int pid)
 		fp = (unsigned long *) *sp++;
 		if (fp <= sp) {
 			kprintf("bad stack, fp (%08X) <= sp (%08X)\n", fp, sp);
+        // added for PA0 tracing
+        if(syscall_trace_on == 1) {
+                syscall_time[currpid][curridx] += ctr1000 - start_time;
+        }
 			return SYSERR;
 		}
 		kprintf("RET  0x%X\n", *sp);
@@ -60,6 +70,10 @@ SYSCALL stacktrace(int pid)
 	kprintf("MAGIC (should be %X): %X\n", MAGIC, *sp);
 	if (sp != (unsigned long *)proc->pbase) {
 		kprintf("unexpected short stack\n");
+        // added for PA0 tracing
+        if(syscall_trace_on == 1) {
+                syscall_time[currpid][curridx] += ctr1000 - start_time;
+        }
 		return SYSERR;
 	}
 #endif

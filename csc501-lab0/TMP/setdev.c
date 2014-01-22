@@ -23,7 +23,13 @@ SYSCALL	setdev(int pid, int dev1, int dev2)
 	short	*nxtdev;
 
 	if (isbadpid(pid))
+	{
+        // added for PA0 tracing
+        if(syscall_trace_on == 1) {
+                syscall_time[currpid][curridx] += ctr1000 - start_time;
+        }
 		return(SYSERR);
+	}
 	nxtdev = (short *) proctab[pid].pdevs;
 	*nxtdev++ = dev1;
 	*nxtdev = dev2;

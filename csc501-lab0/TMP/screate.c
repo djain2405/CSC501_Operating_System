@@ -32,6 +32,10 @@ SYSCALL screate(int count)
 	disable(ps);
 	if ( count<0 || (sem=newsem())==SYSERR ) {
 		restore(ps);
+        // added for PA0 tracing
+        if(syscall_trace_on == 1) {
+                syscall_time[currpid][curridx] += ctr1000 - start_time;
+        }
 		return(SYSERR);
 	}
 	semaph[sem].semcnt = count;

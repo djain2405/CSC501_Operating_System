@@ -27,7 +27,13 @@ SYSCALL sleep100(int n)
 	STATWORD ps;    
 
 	if (n < 0  || clkruns==0)
+	{
+        // added for PA0 tracing
+        if(syscall_trace_on == 1) {
+                syscall_time[currpid][curridx] += ctr1000 - start_time;
+        }
 	         return(SYSERR);
+	}
 	disable(ps);
 	if (n == 0) {		/* sleep100(0) -> end time slice */
 	        ;

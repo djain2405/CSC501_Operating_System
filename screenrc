@@ -1,0 +1,28 @@
+# no bell at all
+  vbell off                             # default: off
+  vbell_msg "   -- Ring, Ring!! --   "  # default: "Wuff,Wuff!!"
+
+# Automatically detach on hangup. 
+  autodetach on                         # default: on
+
+# Don't display the copyright page
+  startup_message off                   # default: on
+
+# Change default scrollback value for new windows
+  defscrollback 1000                    # default: 100
+
+# Define the time that all windows monitored for silence should 
+# wait before displaying a message. Default 30 seconds.
+  silencewait 15                        # default: 30
+
+  shell -$SHELL
+
+# emulate .logout message
+  pow_detach_msg "Screen session of \$LOGNAME \$:cr:\$:nl:ended."
+
+# Pretty status bar at the bottom.
+  caption always "%{= kB}%-Lw%{=s kB}%50>%n%f* %t %{-}%+Lw%<"
+
+# Redraw the screen
+  altscreen on
+

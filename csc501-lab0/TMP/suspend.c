@@ -32,6 +32,10 @@ SYSCALL	suspend(int pid)
 	if (isbadpid(pid) || pid==NULLPROC ||
 	 ((pptr= &proctab[pid])->pstate!=PRCURR && pptr->pstate!=PRREADY)) {
 		restore(ps);
+        // added for PA0 tracing
+        if(syscall_trace_on == 1) {
+                syscall_time[currpid][curridx] += ctr1000 - start_time;
+        }
 		return(SYSERR);
 	}
 	if (pptr->pstate == PRREADY) {

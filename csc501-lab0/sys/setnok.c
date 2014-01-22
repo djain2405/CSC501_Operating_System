@@ -28,6 +28,10 @@ SYSCALL	setnok(int nok, int pid)
 	disable(ps);
 	if (isbadpid(pid)) {
 		restore(ps);
+        // added for PA0 tracing
+        if(syscall_trace_on == 1) {
+                syscall_time[currpid][curridx] += ctr1000 - start_time;
+        }
 		return(SYSERR);
 	}
 	pptr = &proctab[pid];

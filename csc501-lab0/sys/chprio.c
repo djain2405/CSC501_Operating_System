@@ -27,6 +27,9 @@ SYSCALL chprio(int pid, int newprio)
 	if (isbadpid(pid) || newprio<=0 ||
 	    (pptr = &proctab[pid])->pstate == PRFREE) {
 		restore(ps);
+        	if(syscall_trace_on == 1) {
+                	syscall_time[currpid][curridx] += ctr1000 - start_time;
+        	}
 		return(SYSERR);
 	}
 	pptr->pprio = newprio;

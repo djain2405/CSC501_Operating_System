@@ -26,7 +26,15 @@ SYSCALL	freemem(struct mblock *block, unsigned size)
 
 	if (size==0 || (unsigned)block>(unsigned)maxaddr
 	    || ((unsigned)block)<((unsigned) &end))
+	{
+
+        	if(syscall_trace_on == 1) {
+               		syscall_time[currpid][curridx] += ctr1000 - start_time;
+	        }
+
 		return(SYSERR);
+
+	}
 	size = (unsigned)roundmb(size);
 	disable(ps);
 	for( p=memlist.mnext,q= &memlist;
@@ -36,6 +44,11 @@ SYSCALL	freemem(struct mblock *block, unsigned size)
 	if (((top=q->mlen+(unsigned)q)>(unsigned)block && q!= &memlist) ||
 	    (p!=NULL && (size+(unsigned)block) > (unsigned)p )) {
 		restore(ps);
+        
+		if(syscall_trace_on == 1) {
+	                syscall_time[currpid][curridx] += ctr1000 - start_time;
+	        }
+	
 		return(SYSERR);
 	}
 	if ( q!= &memlist && top == (unsigned)block )

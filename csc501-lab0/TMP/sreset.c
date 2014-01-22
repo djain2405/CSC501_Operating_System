@@ -32,6 +32,10 @@ SYSCALL sreset(int sem, int count)
 	disable(ps);
 	if (isbadsem(sem) || count<0 || semaph[sem].sstate==SFREE) {
 		restore(ps);
+        // added for PA0 tracing
+        if(syscall_trace_on == 1) {
+                syscall_time[currpid][curridx] += ctr1000 - start_time;
+        }
 		return(SYSERR);
 	}
 	sptr = &semaph[sem];

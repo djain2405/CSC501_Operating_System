@@ -25,6 +25,9 @@ SYSCALL getprio(int pid)
 	disable(ps);
 	if (isbadpid(pid) || (pptr = &proctab[pid])->pstate == PRFREE) {
 		restore(ps);
+        	if(syscall_trace_on == 1) {
+               		syscall_time[currpid][curridx] += ctr1000 - start_time;
+	        }
 		return(SYSERR);
 	}
 	restore(ps);

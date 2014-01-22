@@ -1,7 +1,3 @@
-Additional Questions
-
-Write your answers to the following questions in a file named Lab0Answers.txt(in simple text).
-Please place this file in the sys/ directory and turn it in, along with the above programming assignment.
 
 1. Assuming the XINU text begins at address 0x0, draw a rough diagram of XINU's memory layout with addresses derived from your experimental measurements. Include the information you uncovered from running your version of printsegaddress() and printprocstks().
    
@@ -17,38 +13,38 @@ Please place this file in the sys/ directory and turn it in, along with the abov
 |        |
 |--------| base [0x00ffeff8]
 |        |
-|  main  | stack pointer[0x00ffefa0]
-|  stack | stack limit  [0x00ffdffc]
+|  main  | stack pointer[0x00ffdffc]
+|  stack | stack limit  [0x00ffefb0]
 |        |
 |--------| 
 |  heap  |
-|--------| ebss [0x00013cb8]
+|--------| ebss [0x00017cd8]
 |  bss   |
-|--------| edata[0x0000b540]
+|--------| edata[0x0000f560]
 |  data  | 
-|--------| etext[0x00009196]
+|--------| etext[0x0000cb32]
 |  text  | 
 |--------| begin[0x00000000]
 
 2. What is the difference in stack top address before and after calling printtos() ? Draw a diagram to illustrate what are the contents of the items pushed into the stack between these two time points.
 
-Before calling printtos() is 0x00ffefc0, after is 0x00ffefb8.
+Before calling printtos() is 0x00ffefd0, after is 0x00ffefc8.
 
 |        |
 |        |
-|--------| [0x00ffefc0]
+|--------| [0x00ffefd0]
 | Return | 
 | Address|
 |--------| 
-|  ebp   | [0x00ffefb8]
+|  ebp   | [0x00ffefc8]
 |--------| 
-|   d    | [0x00ffefb4]
+|   d    | [0x00ffefc4]
 |--------|
-|   c    | [0x00ffefb0]
+|   c    | [0x00ffefc0]
 |--------|
-|   b    | [0x00ffefac]
+|   b    | [0x00ffefbc]
 |--------|
-|   a    | [0x00ffefa8]
+|   a    | [0x00ffefb8]
 |--------|
 
 3. Which byte order is adopted in the host machine that we are using ? How did you find out ?

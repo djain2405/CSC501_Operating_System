@@ -28,7 +28,16 @@ SYSCALL	recvtim(int maxwait)
 	int	msg;
 
 	if (maxwait<0 || clkruns == 0)
+	{
+
+	        // added for PA0 tracing
+        	if(syscall_trace_on == 1) {
+                	syscall_time[currpid][curridx] += ctr1000 - start_time;
+	        }
+
 		return(SYSERR);
+	}
+
 	disable(ps);
 	pptr = &proctab[currpid];
 	if ( !pptr->phasmsg ) {		/* if no message, wait		*/

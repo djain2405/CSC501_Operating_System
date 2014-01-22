@@ -24,7 +24,13 @@ SYSCALL scount(int sem)
 	extern	struct	sentry	semaph[];
 
 	if (isbadsem(sem) || semaph[sem].sstate==SFREE)
+	{
+        	// added for PA0 tracing
+	        if(syscall_trace_on == 1) {
+        	        syscall_time[currpid][curridx] += ctr1000 - start_time;
+	        }
 		return(SYSERR);
+	}
 
         // added for PA0 tracing
         if(syscall_trace_on == 1) {

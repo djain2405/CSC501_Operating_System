@@ -29,6 +29,12 @@ SYSCALL resume(int pid)
 	disable(ps);
 	if (isbadpid(pid) || (pptr= &proctab[pid])->pstate!=PRSUSP) {
 		restore(ps);
+        
+		// added for PA0 tracing
+	        if(syscall_trace_on == 1) {
+        	        syscall_time[currpid][curridx] += ctr1000 - start_time;
+	        }
+
 		return(SYSERR);
 	}
 	prio = pptr->pprio;

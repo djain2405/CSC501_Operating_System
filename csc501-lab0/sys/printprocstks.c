@@ -25,15 +25,15 @@ void printprocstks(int priority)
             kprintf("\tpid: %d\n", i); 
             kprintf("\tpriority: %d\n",process->pprio);
             kprintf("\tbase: 0x%08x\n", process->pbase);
-            kprintf("\tlimit:0x%08x\n", process->plimit);
+            kprintf("\tlimit: 0x%08x\n", process->plimit);
             kprintf("\tlen: %d\n", process->pstklen);
             if( i == currpid) {
                 // special case for current process
                 asm("movl %esp,esp");
-                kprintf("\t pointer: 0x%08x\n", esp);
+                kprintf("\tpointer: 0x%08x\n", esp);
             }
             else
-                kprintf("\t pointer: 0x%08x\n", process->pesp);
+                kprintf("\tpointer: 0x%08x\n", process->pesp);
 
         }
 

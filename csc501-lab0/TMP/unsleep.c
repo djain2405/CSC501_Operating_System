@@ -35,6 +35,10 @@ SYSCALL	unsleep(int pid)
 	    ( (pptr = &proctab[pid])->pstate != PRSLEEP &&
 	     pptr->pstate != PRTRECV) ) {
 		restore(ps);
+        // added for PA0 tracing
+        if(syscall_trace_on == 1) {
+                syscall_time[currpid][curridx] += ctr1000 - start_time;
+        }
 		return(SYSERR);
 	}
 	qptr = &q[pid];

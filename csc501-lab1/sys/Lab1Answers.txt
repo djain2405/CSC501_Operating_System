@@ -1,10 +1,19 @@
 1. What are the advantages and disadvantages of each of the two scheduling policies? Also, give the advantages and disadvantages of the round robin scheduling policy originally implemented in Xinu.
 
+Random Priority
+
+    Advantages:
+    1) No starvation problem.
+    2) Able to allocate fraction of time to each process more accurately with statistically guarantee.
+    
+    Disadvantages:
+    1) Require a good random number generator
+    
 Linux Scheduler
 
    Advantages:
    1) No starvation problem.
-   2) Requires less CPU processing time because it allows a process running its entire time quantum unless being supended.
+   2) Requires less CPU processing time because it allows a process running its entire time quantum unless being suspended.
    3) Better decision making for processes with same priority because it takes history into consideration, fewer previously execution times will have higher priority.
       
    Disadvantages
@@ -23,5 +32,8 @@ Round Robin
 
 2. Describe the way each of the schedulers affects the NULL process.
 
-Linux Scheduler:
-    The NULL process does not get to run as its quantum value is set to 0 .
+Random Priority
+    NULL process get to run when no other process are running.
+    
+Linux Scheduler
+    NULL process won't run because it has quantum value of 0 .

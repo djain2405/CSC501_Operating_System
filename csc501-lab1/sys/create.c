@@ -8,6 +8,7 @@
 #include <mem.h>
 #include <io.h>
 #include <stdio.h>
+#include <lab1.h>
 
 LOCAL int newpid();
 
@@ -58,6 +59,9 @@ SYSCALL create(procaddr,ssize,priority,name,nargs,args)
 	for (i=0 ; i<PNMLEN && (int)(pptr->pname[i]=name[i])!=0 ; i++)
 		;
 	pptr->pprio = priority;
+	pptr->newprio	= priority;
+	pptr->pquantum	= priority;
+	pptr->pcounter	= 0;
 	pptr->pbase = (long) saddr;
 	pptr->pstklen = ssize;
 	pptr->psem = 0;
@@ -95,6 +99,9 @@ SYSCALL create(procaddr,ssize,priority,name,nargs,args)
 	*--saddr = 0;		/* %esi */
 	*--saddr = 0;		/* %edi */
 	*pushsp = pptr->pesp = (unsigned long)saddr;
+
+	// enqueue
+	ht_enqueue(priority, pid);
 
 	restore(ps);
 	return(pid);

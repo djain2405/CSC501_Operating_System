@@ -13,6 +13,7 @@
 #include <q.h>
 #include <io.h>
 #include <stdio.h>
+#include <lab1.h>
 
 /*#define DETAIL */
 #define HOLESIZE	(600)	
@@ -45,9 +46,22 @@ int	numproc;		/* number of live user processes	*/
 int	currpid;		/* id of currently running process	*/
 int	reboot = 0;		/* non-zero after first boot		*/
 int	console_dev;		/* console device			*/
-
 int	rdyhead, rdytail;	/* head/tail of ready list (q indicies)	*/
 char	vers[100];		/* Xinu version printed at startup	*/
+
+// HT: added
+int	scheduleclass = 0;	/* type of scheduler class		*/
+int	nepoch=0;		/* new epoch or not 			*/
+ht_queue q1;			/* queues for random schedulere		*/
+ht_queue q2;
+ht_queue q3;
+
+void ht_init()
+{
+	ht_init_queue(&q1);	
+	ht_init_queue(&q2);	
+	ht_init_queue(&q3);	
+}
 
 /************************************************************************/
 /***				NOTE:				      ***/
@@ -171,6 +185,7 @@ LOCAL int sysinit()
 	pptr->pargs = 0;
 	pptr->pprio = 0;
 	currpid = NULLPROC;
+	pptr->ticks = 0;
 
 	for (i=0 ; i<NSEM ; i++) {	/* initialize semaphores */
 		(sptr = &semaph[i])->sstate = SFREE;
@@ -198,6 +213,7 @@ LOCAL int sysinit()
 	}
 #endif
 
+	ht_init();	// ht_queue init
 	return(OK);
 }
 

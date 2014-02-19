@@ -27,6 +27,7 @@
 #define	PRSUSP		'\006'		/* process is suspended		*/
 #define	PRWAIT		'\007'		/* process is on semaphore queue*/
 #define	PRTRECV		'\010'		/* process is timing a receive	*/
+#define	PRLOCK		'\011'	
 
 /* miscellaneous process definitions */
 
@@ -60,6 +61,8 @@ struct	pentry	{
 	int	fildes[_NFILE];		/* file - device translation	*/
 	int	ppagedev;		/* pageing dgram device		*/
 	int	pwaitret;
+        int     plockret;
+	int 	plock;
 };
 
 

@@ -13,6 +13,7 @@
 #include <q.h>
 #include <io.h>
 #include <stdio.h>
+#include <lock.h>
 
 /*#define DETAIL */
 #define HOLESIZE	(600)	
@@ -177,7 +178,9 @@ LOCAL int sysinit()
 		sptr->sqtail = 1 + (sptr->sqhead = newqueue());
 	}
 
+
 	rdytail = 1 + (rdyhead=newqueue());/* initialize ready list */
+
 
 #ifdef	MEMMARK
 	_mkinit();			/* initialize memory marking */
@@ -198,6 +201,7 @@ LOCAL int sysinit()
 	}
 #endif
 
+	linit();			// lock init
 	return(OK);
 }
 

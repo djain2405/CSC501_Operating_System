@@ -241,7 +241,6 @@ void lock_reuse_test()
 
     // Create original lock
     lck = lcreate();
-	kprintf("lck:%d, liter:%d, lockiter:%d\n",lck, locks[lck].liter, lockiter);
 
     // Create processes that use original lock
     rd1 = create(reader, 2000, 20, "reader", 3, "reader A", lck, 20);
@@ -269,7 +268,6 @@ void lock_reuse_test()
 
     // Create a new lock (this lock will use same slot as original)
     lck = lcreate();
-	kprintf("lck:%d, liter:%d, lockiter:%d\n",lck, locks[lck].liter, lockiter);
 
     // Create a new process to use the new lock spot. 
     rd3 = create(reader, 2000, 20, "reader", 3, "reader D", lck, 20);
@@ -451,7 +449,8 @@ void test3 ()
 
         kprintf("\nTest 3: test the basic priority inheritence\n");
         lck  = lcreate ();
-        //assert(lck != SYSERR);
+        if(lck == SYSERR)
+            kprintf("lck FAIL!\n");
 
         rd1 = create(reader3, 2000, 25, "reader3", 2, "reader A", lck);
         rd2 = create(reader3, 2000, 30, "reader3", 2, "reader B", lck);
@@ -464,22 +463,35 @@ void test3 ()
         kprintf("-start reader A, then sleep 1s. reader A(prio 25) blocked on the lock\n");
         resume(rd1);
         sleep (1);
-	//assert(getprio(wr1) == 25);
+	if(getprio(wr1) != 25)
+            kprintf("FAILED  %d != 25\n", getprio(wr1));
+        else
+            kprintf("PASSED!\n");
 
         kprintf("-start reader B, then sleep 1s. reader B(prio 30) blocked on the lock\n");
         resume (rd2);
 	sleep (1);
-	//assert(getprio(wr1) == 30);
+	if(getprio(wr1) != 30)
+            kprintf("FAILED  %d != 30\n", getprio(wr1));
+        else
+            kprintf("PASSED!\n");
 	
 	kprintf("-kill reader B, then sleep 1s\n");
 	kill (rd2);
 	sleep (1);
-	//assert(getprio(wr1) == 25);
+	if(getprio(wr1) != 25)
+            kprintf("FAILED  %d != 25\n", getprio(wr1));
+        else
+            kprintf("PASSED!\n");
 
 	kprintf("-kill reader A, then sleep 1s\n");
 	kill (rd1);
 	sleep(1);
-	//assert(getprio(wr1) == 20);
+	if(getprio(wr1) != 20)
+            kprintf("FAILED  %d != 20\n", getprio(wr1));
+        else
+            kprintf("PASSED!\n");
+
 
         sleep (8);
         kprintf ("Test 3 OK\n");

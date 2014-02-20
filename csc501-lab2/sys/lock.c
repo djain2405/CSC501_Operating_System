@@ -9,12 +9,14 @@ int lock(int ldes1, int type, int priority) {
 
     STATWORD ps;    
     struct  lentry  *lptr;
+    struct  lentry  *tmplptr;
     struct  pentry  *pptr;
     
     int lock = (int)(ldes1/10);
     int locki= ldes1 - lock * 10;
     int wait = 0;
-    int nr, nw, item;
+    int nr, nw, item, i;
+    int tmpprio;
 
     disable(ps);
     
@@ -55,7 +57,7 @@ int lock(int ldes1, int type, int priority) {
     if (wait) {
         pptr = &proctab[currpid];
         pptr->pstate = PRLOCK;
-        pptr->plock  = ldes1;
+        pptr->plock  = (int)(ldes1 / 10);
 
         insert(currpid, lptr->lqhead, priority);
 
@@ -63,26 +65,25 @@ int lock(int ldes1, int type, int priority) {
         q[currpid].qtime   = ctr1000;
         pptr->plockret     = OK;
 
-        // Update lppriomax for this lock (max priority of all waiting procs)
-        //update_lppriomax(lock);
-        // Update pinh for all procs that hold this lock.
-        //update_pinh(lock);
-        
+        // update lprio (The current inherited priority of the process)
+        update_lprio(lock);
+
+        // update pinh for all procs that hold this lock.
+        tmplptr = &locks[lock];
+        for(i=0; i<NPROC; i++) {
+            if(tmplptr->pidheld[i] > 0)
+                update_pinh(i);
+        }
+
         resched();
         restore(ps);
         return pptr->plockret;
     }
 
+    lptr->pidheld[currpid]          = 1;
+    proctab[currpid].lockheld[lock] = 1;
+    update_pinh(currpid);
 
-    // Update the lock's bitvector so that it can know what procs hold it
-    //set_bit(lptr->lprocs_bsptr, currpid);
-    // Update the proc's bitvector so that it can know what locks it holds
-    //set_bit(proctab[currpid].locks_bsptr, lock);
-    // Update pinh for this process 
-    //update_priority(currpid);
-
-
-    // Increment the reader/writer count and move on.
     if (type == READ)
         lptr->lnr++;
     else
@@ -92,3 +93,36 @@ int lock(int ldes1, int type, int priority) {
     return(OK);
 }
 
+void update_lprio(int lid)
+{
+    int item, maxprio = -1;
+    struct lentry *lptr = &locks[lid];
+
+    int tmplockid = q[lptr->lqtail].qprev;
+    while (tmplockid!= lptr->lqhead) {
+        if (proctab[tmplockid].pprio > maxprio)
+            maxprio = proctab[tmplockid].pprio;
+        tmplockid = q[tmplockid].qprev;
+    }
+    lptr->lprio = maxprio;
+}
+
+void update_pinh(int pid)
+{
+    int i, maxprio = -1;
+    struct pentry *pptr = &proctab[pid];
+
+    for(i=0; i<NLOCKS; i++) {
+        // find lock held by the process
+        if(pptr->lockheld[i] > 0) {
+            if (locks[i].lprio > maxprio)
+                maxprio = locks[i].lprio;
+        }
+    }
+
+    if(pptr->pprio > maxprio)
+        pptr->pinh = 0;
+    else
+        pptr->pinh = maxprio;
+
+}

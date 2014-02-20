@@ -11,18 +11,15 @@
 
 
 struct lentry {
-    char lstate;    // The state LFREE or LUSED
-    int  lnr;       // Count of readers
-    int  lnw;       // Count of writers
-    int  ltype;     // The current access type READ/WRITE
-    int  lqhead;    // q index of head of list
-    int  lqtail;    // q index of tail of list
-    int  liter;     // lock iteration number
-
-    //int lppriomax;  // Maximum process priority among all processes waiting in
-                    // the locks wait queue
-    //bs_ptr lprocs_bsptr; // bit structure that represents all of the processes currently
-                         // holding the lock.
+    char lstate;          // The state LFREE or LUSED
+    int  lnr;             // Count of readers
+    int  lnw;             // Count of writers
+    int  ltype;           // The current access type READ/WRITE
+    int  lqhead;          // q index of head of list
+    int  lqtail;          // q index of tail of list
+    int  liter;           // lock iteration number
+    int  lprio;           // Maximum priority among all processes waiting in the queue
+    int  pidheld[NPROC];  // pids of the processes currently holding this lock
 };
 
 #define isbadlock(l) (l<0 || l>=NLOCKS)
@@ -33,10 +30,13 @@ extern int lockiter;
 extern unsigned long ctr1000;
 extern abs(int arg);
 
-void linit(void);
-int  lcreate(void);
-int  ldelete(int lockdescriptor);
-int  lock(int ldes1, int type, int priority);
-int  releaseall(int numlocks, int ldes1, ...);
+extern void linit(void);
+extern int  lcreate(void);
+extern int  ldelete(int lockdescriptor);
+extern int  lock(int ldes1, int type, int priority);
+extern int  releaseall(int numlocks, int ldes1, ...);
+extern void update_lprio(int lid);
+extern void update_pinh(int pid);
+
 
 #endif

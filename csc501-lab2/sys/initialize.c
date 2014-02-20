@@ -156,9 +156,13 @@ LOCAL int sysinit()
 			NULLSTK);
 	}
 	
-
-	for (i=0 ; i<NPROC ; i++)	/* initialize process table */
+	/* initialize process table */
+	for (i=0 ; i<NPROC ; i++) {
 		proctab[i].pstate = PRFREE;
+	        for (j=0 ; j<NLOCKS; j++) {
+                    proctab[i].lockheld[j] = 0;
+                }
+        }
 
 	pptr = &proctab[NULLPROC];	/* initialize null process entry */
 	pptr->pstate = PRCURR;
@@ -171,6 +175,8 @@ LOCAL int sysinit()
 	pptr->paddr = (WORD) nulluser;
 	pptr->pargs = 0;
 	pptr->pprio = 0;
+	pptr->pinh  = 0;
+	pptr->lockid= -1;
 	currpid = NULLPROC;
 
 	for (i=0 ; i<NSEM ; i++) {	/* initialize semaphores */

@@ -53,15 +53,10 @@ int releaseall(numlocks, ldes1)
         else if(lptr->lnr > 0)
             lptr->lnr--;
 
-        // Update the lock's bitvector so that it can know what procs hold it
-        //clr_bit(lptr->lprocs_bsptr, currpid);
-        // Update the proc's bitvector so that it can know what locks it holds
-        //clr_bit(proctab[currpid].locks_bsptr, lock);
-        // Update the priority of the process that is releasing the lock
-        //update_priority(currpid);
+        lptr->pidheld[currpid]          = 0;
+        proctab[currpid].lockheld[lock] = 0;
+        update_pinh(currpid);
 
-
-        // no waiting procs then continue
         if (isempty(lptr->lqhead))
             continue;
 
@@ -162,6 +157,7 @@ LOCAL void admitreader(int lock) {
 
 LOCAL void unblock(int lock, int item) {
 
+    int i;
     register struct lentry *lptr = &locks[lock];
 
     // update the reader/writer counters
@@ -170,14 +166,13 @@ LOCAL void unblock(int lock, int item) {
     else if (q[item].qtype == WRITE)
         lptr->lnw++;
 
-    // Update the lock's bitvector so that it can know what procs hold it
-    //set_bit(lptr->lprocs_bsptr, item);
-    // Update the proc's bitvector so that it can know what locks it holds
-    //set_bit(proctab[item].locks_bsptr, lock);
-    // Update lppriomax for this lock (max priority of all waiting procs)
-    //update_lppriomax(lock);
-    // Update pinh for all procs that hold this lock.
-    //update_pinh(lock);
+    lptr->pidheld[item]             = 1;
+    proctab[currpid].lockheld[lock] = 1;
+    update_lprio(lock);
+    for(i=0; i<NPROC; i++) {
+        if(lptr->pidheld[i] > 0)
+            update_pinh(i);
+    }
 
     dequeue(item);
     ready(item, RESCHNO);

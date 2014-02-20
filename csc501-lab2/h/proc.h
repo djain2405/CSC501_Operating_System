@@ -15,7 +15,7 @@
 
 #define	FDFREE		-1		/* free file descriptor */
 #define PRFREE		'\002'          /* process slot is free         */
-
+#define NLOCKS          50
 
 /* process state constants */
 
@@ -63,6 +63,9 @@ struct	pentry	{
 	int	pwaitret;
         int     plockret;
 	int 	plock;
+        int     pinh;
+        int     lockid;
+        int     lockheld[NLOCKS];
 };
 
 

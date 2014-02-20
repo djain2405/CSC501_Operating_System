@@ -339,7 +339,7 @@ blkcmp.o: ./../sys/blkcmp.c
 blkequ.o: ./../sys/blkequ.c ../h/kernel.h ../h/systypes.h ../h/conf.h \
   ../h/mem.h
 chprio.o: ./../sys/chprio.c ../h/conf.h ../h/kernel.h ../h/systypes.h \
-  ../h/mem.h ../h/proc.h ../h/q.h ../h/stdio.h
+  ../h/mem.h ../h/proc.h ../h/q.h ../h/stdio.h ../h/lock.h
 clkinit.o: ./../sys/clkinit.c ../h/conf.h ../h/kernel.h ../h/systypes.h \
   ../h/mem.h ../h/sleep.h ../h/i386.h ../h/stdio.h ../h/q.h
 close.o: ./../sys/close.c ../h/conf.h ../h/kernel.h ../h/systypes.h \
@@ -392,7 +392,8 @@ ioerr.o: ./../sys/ioerr.c ../h/conf.h ../h/kernel.h ../h/systypes.h \
 ionull.o: ./../sys/ionull.c ../h/conf.h ../h/kernel.h ../h/systypes.h \
   ../h/mem.h
 kill.o: ./../sys/kill.c ../h/conf.h ../h/kernel.h ../h/systypes.h \
-  ../h/mem.h ../h/proc.h ../h/sem.h ../h/io.h ../h/q.h ../h/stdio.h
+  ../h/mem.h ../h/proc.h ../h/sem.h ../h/io.h ../h/q.h ../h/stdio.h \
+  ../h/lock.h
 kprintf.o: ./../sys/kprintf.c ../h/conf.h ../h/kernel.h ../h/systypes.h \
   ../h/mem.h ../h/tty.h
 kputc.o: ./../sys/kputc.c ../h/conf.h ../h/kernel.h ../h/systypes.h \

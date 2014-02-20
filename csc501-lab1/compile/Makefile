@@ -418,17 +418,7 @@ pci.o: ./../sys/pci.c ../h/conf.h ../h/kernel.h ../h/systypes.h \
 poolinit.o: ./../sys/poolinit.c ../h/conf.h ../h/kernel.h ../h/systypes.h \
   ../h/mem.h ../h/mark.h ../h/bufpool.h ../h/stdio.h
 ps.o: ./../sys/ps.c ../h/stdio.h ../h/kernel.h ../h/systypes.h \
-  ../h/conf.h ../h/mem.h ../h/proc.h ../h/lab1.h /usr/include/stdlib.h \
-  /usr/include/features.h /usr/include/sys/cdefs.h \
-  /usr/include/gnu/stubs.h \
-  /usr/lib/gcc/i386-redhat-linux/3.4.6/include/stddef.h \
-  /usr/include/sys/types.h /usr/include/bits/types.h \
-  /usr/include/bits/wordsize.h /usr/include/bits/typesizes.h \
-  /usr/include/time.h /usr/include/endian.h /usr/include/bits/endian.h \
-  /usr/include/sys/select.h /usr/include/bits/select.h \
-  /usr/include/bits/sigset.h /usr/include/bits/time.h \
-  /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h \
-  /usr/include/bits/sched.h /usr/include/alloca.h
+  ../h/conf.h ../h/mem.h ../h/proc.h ../h/lab1.h
 putc.o: ./../sys/putc.c ../h/conf.h ../h/kernel.h ../h/systypes.h \
   ../h/mem.h ../h/io.h
 queue.o: ./../sys/queue.c ../h/conf.h ../h/kernel.h ../h/systypes.h \
@@ -497,6 +487,30 @@ write.o: ./../sys/write.c ../h/conf.h ../h/kernel.h ../h/systypes.h \
   ../h/mem.h ../h/io.h
 xdone.o: ./../sys/xdone.c ../h/kernel.h ../h/systypes.h ../h/conf.h \
   ../h/mem.h ../h/stdio.h
+create.o: ./../TMP/create.c ../h/conf.h ../h/i386.h ../h/kernel.h \
+  ../h/systypes.h ../h/mem.h ../h/proc.h ../h/sem.h ../h/io.h \
+  ../h/stdio.h ../h/lab1.h
+ht_queue.o: ./../TMP/ht_queue.c ../h/lab1.h
+initialize.o: ./../TMP/initialize.c ../h/conf.h ../h/i386.h ../h/kernel.h \
+  ../h/systypes.h ../h/mem.h ../h/mark.h ../h/bufpool.h ../h/proc.h \
+  ../h/sem.h ../h/sleep.h ../h/tty.h ../h/q.h ../h/io.h ../h/stdio.h \
+  ../h/lab1.h
+main.o: ./../TMP/main.c ../h/conf.h ../h/kernel.h ../h/systypes.h \
+  ../h/mem.h ../h/q.h ../h/stdio.h /usr/include/math.h \
+  /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/gnu/stubs.h /usr/include/bits/huge_val.h \
+  /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h ../h/lab1.h
+ps.o: ./../TMP/ps.c ../h/stdio.h ../h/kernel.h ../h/systypes.h \
+  ../h/conf.h ../h/mem.h ../h/proc.h ../h/lab1.h
+ready.o: ./../TMP/ready.c ../h/conf.h ../h/kernel.h ../h/systypes.h \
+  ../h/mem.h ../h/proc.h ../h/q.h ../h/lab1.h
+resched.o: ./../TMP/resched.c ../h/conf.h ../h/kernel.h ../h/systypes.h \
+  ../h/mem.h ../h/proc.h ../h/q.h /usr/include/math.h \
+  /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/gnu/stubs.h /usr/include/bits/huge_val.h \
+  /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h ../h/lab1.h \
+  ../h/stdio.h
+schedclass.o: ./../TMP/schedclass.c ../h/lab1.h
 ttyalloc.o: ./../tty/ttyalloc.c ../h/conf.h ../h/kernel.h ../h/systypes.h \
   ../h/mem.h ../h/tty.h ../h/stdio.h
 ttycntl.o: ./../tty/ttycntl.c ../h/conf.h ../h/kernel.h ../h/systypes.h \
@@ -550,14 +564,3 @@ strncat.o: ./../lib/libxc/strncat.c
 strncmp.o: ./../lib/libxc/strncmp.c
 strncpy.o: ./../lib/libxc/strncpy.c
 swab.o: ./../lib/libxc/swab.c
-compgoodness.o: ./../sys/deleted/compgoodness.c ../h/kernel.h \
-  ../h/systypes.h ../h/conf.h ../h/mem.h ../h/proc.h ../h/q.h \
-  ../h/stdio.h
-getschedclass.o: ./../sys/deleted/getschedclass.c
-highPrio.o: ./../sys/deleted/highPrio.c
-isnewepoch.o: ./../sys/deleted/isnewepoch.c ../h/conf.h ../h/kernel.h \
-  ../h/systypes.h ../h/mem.h ../h/proc.h ../h/q.h ../h/stdio.h
-nextHighPr.o: ./../sys/deleted/nextHighPr.c ../h/kernel.h ../h/systypes.h \
-  ../h/conf.h ../h/mem.h ../h/proc.h ../h/q.h ../h/stdio.h
-setcounter.o: ./../sys/deleted/setcounter.c
-setschedclass.o: ./../sys/deleted/setschedclass.c

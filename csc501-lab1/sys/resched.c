@@ -32,23 +32,6 @@ int compgoodness(int ppid)
         return goodness;
 }
 
-int getnextpid(int qid) 
-{
-	// return next pid from corresponding "queue" used by RANDOMSCHED
-	int nextpid = -1;
-	if(qid == 1){
-		nextpid = ht_dequeue(&q1);
-	}
-	else if(qid == 2){
-		nextpid = ht_dequeue(&q2);
-	}
-	else {
-		nextpid = ht_dequeue(&q3);
-	}
-
-	return nextpid;
-}
-	
 int resched()
 {
 	register struct     pentry  *optr;  /* pointer to old process entry */
@@ -59,10 +42,10 @@ int resched()
 	int chosen     = -1;
 
 
-        if(scheduleclass == RANDOMSCHED) {       
+        if(scheduleclass == 3) {       
 		
 		//kprintf("Entered RANDOMSCHED\n");
-		srand(0);
+		//srand(0);
 
 	    do{
 		chosen = rand() % 100;
@@ -82,12 +65,10 @@ int resched()
 	
 	    } while(next_ppid<0);
 	        
-		//kprintf("next_ppid=%d, currpid=%d\n",next_ppid,currpid);
 		
 		optr = &proctab[currpid];
 		nptr = &proctab[next_ppid];
 		
-		ht_enqueue(optr->pprio, currpid);
 		
 		// check if next one is also current process
 		if(next_ppid == currpid) {
@@ -96,6 +77,9 @@ int resched()
 			#endif
 			return OK;
 		}
+		ht_enqueue(optr->pprio, currpid);
+		
+		kprintf("next_ppid=%d, currpid=%d\n",next_ppid,currpid);
 
 		// force context switch
 		if (optr->pstate == PRCURR) {
@@ -103,8 +87,7 @@ int resched()
                 	insert(currpid,rdyhead,optr->pprio);
         	}
 
-		nptr = &proctab[ (currpid = dequeue(next_ppid)) ];
-
+                dequeue(currpid);
 		nptr->pstate = PRCURR;
 		currpid = next_ppid;
 
@@ -117,7 +100,7 @@ int resched()
 		return(OK);
 
         }
-        else if(scheduleclass == LINUXSCHED) {
+        else if(scheduleclass == 2) {
 
 		//kprintf("Entered LINUXSCHED\n");
         	int i = 0;
@@ -126,6 +109,7 @@ int resched()
                 proctab[currpid].pcounter =  preempt;
                 nepoch = nepoch - (proctab[currpid].pquantum-preempt);          
                 
+                isnewepoch = 1;
                 //check if process is in new epoch
             	for(i = 1;i < NPROC; i++) {
                 	if(proctab[i].pstate == PRCURR || proctab[i].pstate == PRREADY){
@@ -139,7 +123,10 @@ int resched()
 	        	// set counter, quantum and epoch for the processes in the current epoch
                 	for(i=1;i<NPROC;i++) {          
                 	       	proctab[i].pprio = proctab[i].newprio;
-                                proctab[i].pquantum = floor(proctab[i].pcounter/2) + proctab[i].pprio;
+                                if (proctab[i].pcounter >= 50)
+                                    proctab[i].pquantum = floor(proctab[i].pcounter/2) + proctab[i].pprio;
+                                else
+                                    proctab[i].pquantum =  proctab[i].pprio;
 				proctab[i].pcounter = proctab[i].pquantum;
                                 nepoch = nepoch + proctab[i].pquantum;              
                 	}
@@ -192,7 +179,6 @@ int resched()
 
         }
         else{
-		//kprintf("Entered DEFAULT\n");
 
 		/* no switch needed if current process priority higher than next*/
 		if ( ( (optr= &proctab[currpid])->pstate == PRCURR) &&

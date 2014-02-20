@@ -2,7 +2,7 @@
 
 void setschedclass(int schedclass)
 {
-        scheduleclass=schedclass;
+        scheduleclass = 2;
 }
 
 int getschedclass()

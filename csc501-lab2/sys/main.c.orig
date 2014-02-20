@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <conf.h>
+#include <kernel.h>
+#include <proc.h>
+#include <lock.h>
+#include <sem.h>
+
+#define DEFAULT_LOCK_PRIO 20
+
+void reader (char *msg, int lck, int lprio)
+{
+        int     ret;
+
+        kprintf ("  %s: to acquire lock\n", msg);
+        ret = lock (lck, READ, lprio);
+    if (rc == SYSERR) {
+        kprintf ("  %s: lock returned SYSERR\n", msg);
+        return;
+    }
+    if (rc == DELETED) {
+        kprintf ("  %s: lock was DELETED\n", msg);
+        return;
+    }
+        kprintf ("  %s: acquired lock, sleep 3s\n", msg);
+        sleep (3);
+        kprintf ("  %s: to release lock\n", msg);
+	releaseall (1, lck);
+}
+
+void writer (char *msg, int lck, int lprio)
+{
+	kprintf ("  %s: to acquire lock\n", msg);
+        lock (lck, WRITE, lprio);
+        kprintf ("  %s: acquired lock, sleep 3s\n", msg);
+        sleep (3);
+        kprintf ("  %s: to release lock\n", msg);
+        releaseall (1, lck);
+}

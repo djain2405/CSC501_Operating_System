@@ -20,6 +20,7 @@ int releaseall(numlocks, ldes1)
     int longread, longwrite;
     int choice;
     unsigned long maxreadtime, maxwritetime;
+    int anyerr = 0;
 
     disable(ps);
     
@@ -37,14 +38,14 @@ int releaseall(numlocks, ldes1)
 
         // verify lock
         if (isbadlock(lock) || lptr->lstate==LFREE) {
-            restore(ps);
-            return(SYSERR);
+            anyerr = 1;
+            continue;
         }
 
         // verify the lock request is in current locks iteration
         if (locki != lockiter) {
-            restore(ps);
-            return(SYSERR);
+            anyerr = 1;
+            continue;
         }
 
         // update the count for this resource
@@ -124,6 +125,11 @@ int releaseall(numlocks, ldes1)
 		unblock(lock,choice);
 	    }
 	}
+    }
+
+    if(anyerr) {
+        restore(ps);
+        return SYSERR;
     }
 
     restore(ps);

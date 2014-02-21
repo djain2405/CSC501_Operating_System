@@ -1,14 +1,16 @@
 1. The priority inversion problem could cause that a higher-priority process needs to wait for the completion of a lower-priority process.
     1) Priority inheritance is one approach to address this issue. Please give another approach and briefly describe its idea.
     
-    Use non-blocking synchronization instead of blocking synchronization, which avoids high-priority processes blocked by lower priority ones.
+    Use non-blocking synchronization instead of blocking synchronization, which performs changes on shadow copies, then perform atomic swap when completes, this avoids high-priority processes blocked by lower priority ones.
     
     
     2)Design a test case to show that your approach can address the priority inversion problem. You should compare the results that derived from the original XINU implementation (use semaphore) and that derived from your implementation (use readers/writer locks). Put your results in Lab2Answers.txt and your test case program (name it task1.c) in both ./sys and ./TMP
     
-    Results: A process with lower priority never gets runned when using XINU semaphore while in my approach it gets to be runned.
+    Results: The process with high priority is executed after a medium priority one when it is requesting a lock that is held by a low priority process when using XINU semaphore, while with priority inheritance approach it gets to be runned before the medium priority one.
     
     
 2. Synchronization is a quite complex issue in operating systems. To show your understanding about process synchronization, you are asked to point out a reader/writer synchronization issue in this pesudo-code: task2_sync_issue.c. Multiple reader threads can execute this code concurrently by calling do_update. All the variables starting with global_ are global variables. You are asked to describe the potential issue caused by the incorrect synchronization and point out at least one possible thread interleaving that would trigger the problem. Put your answer in Lab2Answers.txt mentioned above.
+
+    The do_update() function only aquires reader lock, which is not exclusive, and thus could lead to synchronization problems. Say when Proc A calls do_update and aquires the reader lock, when it enters the buffer_add function, another Proc B tries to aquire the lock and if it has higher priority than Proc A, it would aquire the lock and perform its update to the global_buf. After Proc B is done, Proc A continues buffer_add function and it will overwrite the time of Proc B, which causes the problem.
 
     
